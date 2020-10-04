@@ -62,7 +62,7 @@
                                     <tbody>
                                         <t t-set="total" t-value="[]"/>
                                         <t t-foreach="o.details_by_salary_rule_category" t-as="line_id">
-                                            <t t-if="line_id.total != 0.00">
+                                            
                                             <tr t-if="line_id.category_id.type_select == 'allowance'">
                                                 
                                                     <td width="60%" height="20px" valign="top" style="padding-left:5px;  line-height:100%; font-size:15px;border-left:none !important;border-top:none !important;"><span t-field="line_id.name"/></td>
@@ -71,7 +71,7 @@
                                                     <t t-set="allowance_total" t-value="allowance_total + line_id.total"/>
 
                                             </tr>
-                                            </t>
+                                            
                                         </t>
                                     </tbody>
                                 </table>
@@ -81,14 +81,14 @@
                                     <tbody>
                                         <t t-set="total" t-value="[]"/>
                                         <t t-foreach="o.details_by_salary_rule_category" t-as="line_id">
-                                            <t t-if="line_id.total != 0.00">
+                                            
                                             <tr t-if="line_id.category_id.type_select == 'deduction'">
                                                     <td width="60%" height="20px" valign="top" style="padding-left:5px; line-height:100%; font-size:15px;border-left:none !important;border-top:none !important;"><span t-field="line_id.name"/></td>
                                                     <t t-set="total" t-value="total+[line_id.total]"/>
                                                     <td width="40%" height="20px" valign="top" style="padding-left:5px;  text-align:right; line-height:100%; font-size:15px;border-top:none !important;border-right:none !important;"><span t-field="line_id.total"/><span t-field="o.company_id.currency_id.symbol"/></td>
                                                     <t t-set="deduction_total" t-value="deduction_total + line_id.total"/>
                                             </tr>
-                                            </t>
+                                            
                                         </t>
                                     </tbody>
                                 </table>
