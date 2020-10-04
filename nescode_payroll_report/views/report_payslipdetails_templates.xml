@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payslipdetails_nescode">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Pay Slip</h2>
+                    <p t-field="o.name"/>
+
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td><span t-field="o.employee_id"/></td>
+                            <td><strong>Designation</strong></td>
+                            <td><span t-field="o.employee_id.job_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address</strong></td>
+                            <td colspan="3">
+                                <div t-field="o.employee_id.address_home_id"
+                                    t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td><span t-field="o.employee_id.work_email"/></td>
+                            <td><strong>Identification No</strong></td>
+                            <td><span t-field="o.employee_id.identification_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reference</strong></td>
+                            <td><span t-field="o.number"/></td>
+                            <td><strong>Bank Account</strong></td>
+                            <td><span t-field="o.employee_id.bank_account_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date From</strong></td>
+                            <td><span t-field="o.date_from"/></td>
+                            <td><strong>Date To</strong></td>
+                            <td><span t-field="o.date_to"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- <h3>Details by Salary Rule Category</h3> -->
+
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                                <tr>
+                                    <td width="30%" ><strong>Earnings</strong></td>
+                                    <td width="20%" style="text-align:right;"><strong>Amount</strong></td>
+                                    <td width="30%" ><strong>Deduction</strong></td>
+                                    <td width="20%" style="text-align:right;"><strong>Amount</strong></td>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <t t-set="allowance_total" t-value="0.00"/>
+                            <t t-set="deduction_total" t-value="0.00"/>
+                            <tr>
+                            <td colspan="2">
+                                <table  width="100%"  cellpadding="0px" cellspacing="0px" style="padding:0px;border:none !important;">
+                                    <tbody>
+                                        <t t-set="total" t-value="[]"/>
+                                        <t t-foreach="o.details_by_salary_rule_category" t-as="line_id">
+                                            <t t-if="line_id.total != 0.00">
+                                            <tr t-if="line_id.category_id.type_select == 'allowance'">
+                                                
+                                                    <td width="60%" height="20px" valign="top" style="padding-left:5px;  line-height:100%; font-size:15px;border-left:none !important;border-top:none !important;"><span t-field="line_id.name"/></td>
+                                                    <t t-set="total" t-value="total+[line_id.total]"/>
+                                                    <td width="40%" height="20px" valign="top" style="padding-left:5px;  text-align:right; line-height:100%; font-size:15px;border-top:none !important;border-right:none !important;"><span t-field="line_id.total"/><span t-field="o.company_id.currency_id.symbol"/></td>
+                                                    <t t-set="allowance_total" t-value="allowance_total + line_id.total"/>
+
+                                            </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td colspan="2">
+                                <table  width="100%"  cellpadding="0px" cellspacing="0px" style="padding:0px">
+                                    <tbody>
+                                        <t t-set="total" t-value="[]"/>
+                                        <t t-foreach="o.details_by_salary_rule_category" t-as="line_id">
+                                            <t t-if="line_id.total != 0.00">
+                                            <tr t-if="line_id.category_id.type_select == 'deduction'">
+                                                    <td width="60%" height="20px" valign="top" style="padding-left:5px; line-height:100%; font-size:15px;border-left:none !important;border-top:none !important;"><span t-field="line_id.name"/></td>
+                                                    <t t-set="total" t-value="total+[line_id.total]"/>
+                                                    <td width="40%" height="20px" valign="top" style="padding-left:5px;  text-align:right; line-height:100%; font-size:15px;border-top:none !important;border-right:none !important;"><span t-field="line_id.total"/><span t-field="o.company_id.currency_id.symbol"/></td>
+                                                    <t t-set="deduction_total" t-value="deduction_total + line_id.total"/>
+                                            </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="font-size:13px;border:none !important;">
+                            <td colspan="4" style="border:none !important;">
+                                <table width="100%" cellpadding="0px" cellspacing="0px" style="padding:0px;">
+
+                                    <tr>
+                                        <td width="30%" style="padding-left:5px;font-size:15px;border-top:none !important;border-left:none !important;"><strong>Total Earnings</strong></td>
+                                       
+                                            <td width="20%" style="text-align:right; font-size:15px;border-top:none !important;">
+                                                <strong>
+                                                    <t><span t-esc="allowance_total"/><span t-field="o.company_id.currency_id.symbol"/></t>
+                                                </strong>
+                                            </td>
+                                       
+                                        <td width="30%" style="padding-left:5px;  font-size:15px;border-top:none !important;"><strong>Total Deductions</strong></td>
+                                        
+                                            <td width="20%" style="text-align:right; ;font-size:15px;border-top:none !important;border-right:none !important;">
+                                                <strong>
+                                                    <t><span t-esc="deduction_total"/><span t-field="o.company_id.currency_id.symbol"/></t>
+                                                </strong>
+                                            </td>
+                                      
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="font-size:13px;border:none !important;">
+                            <td colspan="4" style="border:none !important;">
+                                <table width="100%" cellpadding="0px" cellspacing="0px" style="padding:0px;border:none !important;">
+                                    <tr>
+                                        <td width="20%" style="padding-left:5px; font-size:15px;border:none !important;"><strong>Net Pay</strong></td>
+                                        <t t-foreach="o.details_by_salary_rule_category" t-as="n">
+                                            <td width="30%" style=" text-align:right;font-size:15px;border:none !important;">
+                                                <strong>
+                                                    <t t-if="n.code == 'NET'"><span t-field="n.total"/><span t-field="o.company_id.currency_id.symbol"/></t>
+                                                </strong>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                          
+                        </tbody>
+                    </table>
+
+      <div style=" border:1px solid  #e6e6e6
+;
+  line-height:400%;text-align:right;">
+  <p valign="bottom" style="padding-top:80px;">Authorized signature</p>
+  </div>
+            
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>
